@@ -50,7 +50,7 @@ $pogoj = $true
 
 
 <#
-    Primer pogojnega (IF) stavka
+    Primer pogojnega stavka
 #>
 
 if ( $pogoj )
@@ -60,4 +60,49 @@ if ( $pogoj )
 else
 {
     Write-Output "Vrednost spremenljivke `$Pogoj je $Pogoj."
+}
+
+<#
+    Sprehajanje po vrednostih
+
+    Pri obdelavi večjih količin podatkov v poljih se boste želeli sprehoditi po vrednostih 
+    v teh poljih. Na voljo imamo nekaj pristopov in sicer:
+
+    1. $spremenljivka | ForEach-Object
+    2. foreach ($spremenljivka in $spremenljivke)
+
+    Mimogrede smo spoznali še "pipe" znak, | (AltGr + W)
+#>
+
+$procesi | ForEach-Object {
+    $_
+}
+
+<#
+    Najpogosteje uporabljam ta pristop, saj mi omogoča, da sploh večje obdelave testiram na 
+    manjšem obsegu podatkov:
+    - prikažem samo prvega, primer $procesi[0] ali
+    - prikažem prve 3, primer $procesi[0..2] ali
+    - od 20. elementa do koncam primer $procesi[19..$procesi.Count]
+    - ...
+#> 
+
+$procesi[0] | ForEach-Object {
+    $_
+}
+
+<#
+    $_ prikaže atribute objekta ali vrednost v posamezni iteraciji ForEach zanke. Če dodamo
+    še piko lahko prikaz omejimo na posamezen atribut objekta.
+#>
+
+$procesi[0..3] | ForEach-Object {
+    <# 
+        Generalno atribut posameznega objekta ne moremo uporabiti v drugih funkcijah
+        (primer spodaj je Write-Output), razen izjemoma, zato jih praviloma posebej definiramo.
+    #>
+    $processName = $_.ProcessName
+    $id = $_.Id
+
+    Write-Output "$processName ima ID $id."
 }
