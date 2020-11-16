@@ -106,3 +106,10 @@ $procesi[0..3] | ForEach-Object {
 
     Write-Output "$processName ima ID $id."
 }
+
+<#
+    Za prikaz večje količine podatkov lahko uporabimo GridView, ki v novem interaktivnem oknu
+    odpre podatke in omogoča tudi iskanje, filtriranje in podobno.
+#>
+
+$procesi | Out-GridView
