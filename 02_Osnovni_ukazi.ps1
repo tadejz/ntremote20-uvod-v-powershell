@@ -113,3 +113,14 @@ $procesi[0..3] | ForEach-Object {
 #>
 
 $procesi | Out-GridView
+
+<#
+    S pomočjo pipe znaka nam je na voljo tudi filtriranje podatkov po različnih atributih 
+    objektov. Operandi za primerjavo so opisani v dokumentaciji na spletnem naslovu:
+    https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comparison_operators
+    
+    Poglejmo primer.
+#>
+
+# Procesi, kjer je Id procesa večji kot 10000
+$procesi | Where-Object { $_.Id -gt 10000 }
