@@ -1,7 +1,7 @@
 <#
     Za povezljvost z Azure AD lahko uporabimo dva modula:
     - MSOnline (starejši, včasih bolj prijazen in nekoliko počasnejši)
-    - AzureAD (novejši, osnovan na Graph API, hitrejši, nekateri posegi so manj prijazne)
+    - AzureAD (novejši, osnovan na Graph API, hitrejši, nekateri posegi so manj prijazni)
 
     Zaradi teh posebnosti včasih uporabim kar oba hkrati.
 
@@ -109,3 +109,11 @@ Set-MsolUserPassword -UserPrincipalName "janez.novak@ntremote.si" -NewPassword "
 
 # Zahteva za spremembo gesla ob naslednji prijavi
 Set-MsolUserPassword -UserPrincipalName "janez.novak@ntremote.si" -ForceChangePasswordOnly
+
+<#
+    Poglejmo si še nekaj posebnosti uporabe modula AzureAD, glavnina možnosti je podobna kot pri
+    modulu MSOnline. Na izpisih je nekoliko več poudarka na atributu ObjectId.
+#>
+
+# Pridobimo seznam uporabnikov
+Get-AzureADUser | Out-GridView
