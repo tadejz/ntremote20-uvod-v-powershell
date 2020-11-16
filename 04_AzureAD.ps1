@@ -68,3 +68,44 @@ function Connect-Microsoft365 {
         }
     }
 }
+
+<#
+    Seznam pogosteje uporabljenih ukazov, predvsem vezanih na uporabnike
+#>
+
+# Ustvarimo uporabnika, ukaz vrne geslo novo ustvarjenega uporabnika
+New-MsolUser -DisplayName "Janez Novak" -UserPrincipalName "janez.novak@ntremote.si"
+
+# Uporabnika izbrišemo v koš
+Remove-MsolUser -UserPrincipalName "janez.novak@ntremote.si"
+
+# Vrnemo uporabnike v košu
+Get-MsolUser -ReturnDeletedUsers
+
+# Izbrišemo uporabnike iz koša (POZOR: Tega se ne da preklicati)
+Get-MsolUser -ReturnDeletedUsers | Remove-MsolUser -RemoveFromRecycleBin
+
+<#
+    Licence v Powershell naslavljamo s pomočjo AccountSkuId, ki je v obliki
+    {vrednost * v primarni domeni *.onmicrosoft.com}:{SkuId licence}, primer:
+    ntremote:POWER_BI_STANDARD
+#>
+
+# Uporabniku dodamo eno licenco
+Set-MsolUserLicense -UserPrincipalName -AddLicenses "ntremote:POWER_BI_STANDARD"
+
+<#
+    Parameter -AddLicenses (in tudi -Remove-Licenses) sprejme tudi polje, primer:
+    $licensesToAdd = @("AccountSkuId1","AccountSkuId2")
+    Treba je paziti, da so licenčni paketi med seboj kompatibilni.
+#>
+
+# Uporabniku dodamo več licenc
+$licensesToAdd = @("ntremote:POWER_BI_STANDARD","ntremote:POWER_BI_STANDARD")
+Set-MsolUserLicense -UserPrincipalName "janez.novak@ntremote.si" -AddLicenses $licensesToAdd
+
+# Nastavitev gesla
+Set-MsolUserPassword -UserPrincipalName "janez.novak@ntremote.si" -NewPassword "NovoGeslo!" -ForceChangePassword
+
+# Zahteva za spremembo gesla ob naslednji prijavi
+Set-MsolUserPassword -UserPrincipalName "janez.novak@ntremote.si" -ForceChangePasswordOnly
