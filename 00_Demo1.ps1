@@ -16,8 +16,28 @@ else
     Write-Output "Vrednost spremenljivke `$Pogoj je $Pogoj."
 }
 
-$procesi | ForEach-Object {
-    $_
+$procesi[0] | ForEach-Object {
+    #$_.Id
+    $_
 }
 
 Remove-Variable procesi
+
+Get-ChildItem # Modify [CmdletBinding()] to [CmdletBinding(SupportsShouldProcess=$true)]
+$paths = @()
+foreach ($aPath in $Path) {
+    if (!(Test-Path -LiteralPath $aPath)) {
+        $ex = New-Object System.Management.Automation.ItemNotFoundException "Cannot find path '$aPath' because it does not exist."
+        $category = [System.Management.Automation.ErrorCategory]::ObjectNotFound
+        $errRecord = New-Object System.Management.Automation.ErrorRecord $ex,'PathNotFound',$category,$aPath
+        $psCmdlet.WriteError($errRecord)
+        continue
+    }
+
+    # Resolve any relative paths
+    $paths += $psCmdlet.SessionState.Path.GetUnresolvedProviderPathFromPSPath($aPath)
+}
+
+Start-Transcript
+
+Stop-Transcript

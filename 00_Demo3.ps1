@@ -5,5 +5,6 @@ Connect-ExchangeOnline
 (Get-ExoMailbox | Select-Object *)[0]
 
 Get-OrganizationConfig | Format-Table Name,OAuth* -Auto
+Set-OrganizationConfig -OAuth2ClientProfileEnabled $true
 
-Get-InboxRule -Mailbox simon
+$rule = Get-InboxRule -Mailbox simon

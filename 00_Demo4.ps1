@@ -6,7 +6,7 @@ Install-Module SharePointPnPPowerShellOnline
 Connect-PnPOnline -Url https://spmb05.sharepoint.com
 
 Get-PnPList
-Add-PnPListItem -List "NTR" -Values @{"Title" = "Testiramo iz Powershell"}
+Add-PnPListItem -List "NTR" -Values @{"Title" = "Testiramo iz Powershell (drugič)"}
 
 Disconnect-PnPOnline
 Disconnect-SPOService
