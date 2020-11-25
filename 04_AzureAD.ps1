@@ -31,11 +31,19 @@ function Connect-Microsoft365 {
     if ( !$Connected )
     {
         # Disconnect previously active AzureAD connection
-        Disconnect-AzureAD
+        try 
+        { 
+            $test = Get-AzureADTenantDetail
+            Disconnect-AzureAD
+            Remove-Variable test
+        } 
+        catch [Microsoft.Open.Azure.AD.CommonLibrary.AadNeedAuthenticationException]
+        {
+            Connect-AzureAD
+        }
 
         # Connect to service
         Connect-MsolService
-        Connect-AzureAD
     }
 
     # Pridobimo seznam domen v okolju, hkrati pa tako tudi preverimo, če smo sploh povezani
@@ -57,7 +65,7 @@ function Connect-Microsoft365 {
             $primaryDomain = ($domains | Where-Object { $_.Name -like "*.onmicrosoft.com" }).Name
 
             # Prikažemo opis domen in nato še seznam
-            Write-Output "`r`nV okolju se poleg primarne domene $primaryDomain nahaja še $domainCount domen in sicer:"
+            Write-Output "`r`nV okolju se vključno s primarno domeno $primaryDomain nahaja še $domainCount domen in sicer:"
             Get-MsolDomain
 
             $activeLicenses = (Get-MsolAccountSku | Where-Object { $_.ActiveUnits -gt 0 }).Count
